@@ -1,0 +1,52 @@
+if (JST === undefined) {
+    JST = {}
+}
+
+const jstResult = {
+    services: {
+        weblate: {
+            image: 'weblate/weblate',
+            depends_on: [
+                'database',
+                'cache',
+            ],
+            env_file: [
+                './.env'
+            ],
+            environment: {
+                WEBLATE_ADMIN_PASSWORD: JST.getConfiguration('project.admin_password')
+            },
+            read_only: true,
+            tmpfs: [
+                '/run',
+                '/tmp',
+            ],
+            virtualHosts: [
+                {port: 8080, domain: JST.buildDomain(), name: 'weblate'},
+            ],
+            volumes: [
+                'weblate-data:/app/data',
+                'weblate-cache:/app/cache',
+            ]
+        },
+        database: {
+            image: 'postgres:15-alpine',
+            env_file: [
+                './.env'
+            ],
+            volumes: [
+                'postgres-data:/var/lib/postgresql/data',
+            ]
+        },
+        cache: {
+            image: 'redis:7-alpine',
+            command: ['redis-server', '--save', '60', '1'],
+            read_only: true,
+            volumes: [
+                'redis-data:/data',
+            ]
+        },
+    },
+}
+
+jstResult
