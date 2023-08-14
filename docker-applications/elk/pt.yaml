@@ -1,0 +1,9 @@
+env:
+  ELASTIC_VERSION: '8.9.0'
+  LOGSTASH_INTERNAL_PASSWORD: 'L0gSt4sh'
+  ELASTIC_PASSWORD: '3l4st1C'
+  KIBANA_SYSTEM_PASSWORD: 'K1B4N4'
+
+extension:
+  filebeat: false
+  fleet: false
