@@ -1,0 +1,29 @@
+if (JST === undefined) {
+    JST = {}
+}
+
+const jstResult = {
+    services: {
+        minio: {
+            image: 'minio/minio',
+            command: ['server','--console-address', ':9001', '/data'],
+            environment: {
+                MINIO_BROWSER_REDIRECT_URL: `https://${JST.buildDomain('console')}`,
+                MINIO_DOMAIN: JST.buildDomain(),
+                MINIO_ROOT_PASSWORD: JST.getConfiguration('project.admin.password'),
+                MINIO_ROOT_USER: JST.getConfiguration('project.admin.username'),
+                MINIO_SERVER_URL: `https://${JST.buildDomain()}`,
+            },
+            virtualHosts: [
+                { port: 9000, domain: JST.buildDomain(), name: 'public' },
+                { port: 9001, domain: JST.buildDomain('console'), name: 'console' },
+            ],
+            volumes: [
+                './data:/data',
+                './config:/root/.minio',
+            ],
+        }
+    },
+}
+
+jstResult
