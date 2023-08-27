@@ -1,0 +1,19 @@
+project:
+  name: grafana
+  unpoller:
+    enabled: false
+  unifi:
+    url: ''
+    username: ''
+    password: ''
+  grafana:
+    username: ''
+    password: ''
+  influxdb:
+    admin:
+      username: ''
+      password: ''
+      token: ''
+  prometheus:
+    prometheus: []
+    nodeExporters: []

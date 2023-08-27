@@ -1,0 +1,69 @@
+if (JST === undefined) {
+    JST = {}
+}
+
+const jstResult = {
+    services: {
+        grafana: {
+            image: 'grafana/grafana-oss',
+            applyUser: true,
+            depends_on: [
+                'influxdb'
+            ],
+            environment: {
+                GF_SERVER_ROOT_URL: `https://${JST.buildDomain()}/`
+            },
+            env_file: [
+                './.env'
+            ],
+            virtualHosts: [
+                {port: 3000, domain: JST.buildDomain(), name: 'grafana'},
+            ],
+            volumes: [
+                './grafana:/var/lib/grafana'
+            ]
+        },
+        influxdb: {
+            image: 'influxdb:alpine',
+            applyUser: true,
+            env_file: [
+                './.env'
+            ],
+            virtualHosts: [
+                {port: 8086, domain: JST.buildDomain('influxdb'), name: 'influxdb'},
+            ],
+            volumes: [
+                './influxdb:/var/lib/influxdb'
+            ]
+        },
+        prometheus: {
+            image: 'prom/prometheus:latest',
+            applyUser: true,
+            volumes: [
+                './prometheus/config:/etc/prometheus/',
+                './prometheus/data:/prometheus'
+            ],
+            virtualHosts: [
+                {port: 9090, domain: JST.buildDomain('prometheus'), name: 'prometheus'},
+            ],
+        },
+    }
+}
+
+if(JST.getConfiguration('project.unpoller.enabled') === 'true'){
+    jstResult.services['unpoller'] = {
+        image: 'ghcr.io/unpoller/unpoller:latest',
+            env_file: [
+            './.env'
+        ],
+            depends_on: [
+            'influxdb'
+        ],
+            volumes: [
+            // './unpoller/up.conf:/etc/unpoller/up.conf'
+        ],
+            networks: ['default']
+    }
+}
+
+jstResult
