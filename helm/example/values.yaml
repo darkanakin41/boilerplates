@@ -1,0 +1,15 @@
+# Default values for example.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 3
+
+image:
+  repository: nginx
+  pullPolicy: IfNotPresent
+  tag: "alpine"
+  defaultPort: 80
+
+service:
+  type: LoadBalancer
+  port: 80
