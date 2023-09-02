@@ -1,0 +1,17 @@
+- name: Update Packages
+  hosts: all
+  become: yes
+  tasks:
+    - name: apt
+      apt:
+        update_cache: yes
+        upgrade: 'yes'
+
+- name: Update Distro
+  hosts: all
+  become: true
+  tasks:
+    - name: apt
+      apt:
+        update_cache: yes
+        upgrade: 'dist'

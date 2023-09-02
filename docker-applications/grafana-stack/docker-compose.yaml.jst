@@ -50,19 +50,50 @@ const jstResult = {
     }
 }
 
-if(JST.getConfiguration('project.unpoller.enabled') === 'true'){
+if (JST.getConfiguration('project.unpoller.enabled') === 'true') {
     jstResult.services['unpoller'] = {
         image: 'ghcr.io/unpoller/unpoller:latest',
-            env_file: [
+        env_file: [
             './.env'
         ],
-            depends_on: [
+        depends_on: [
             'influxdb'
         ],
-            volumes: [
+        volumes: [
             // './unpoller/up.conf:/etc/unpoller/up.conf'
         ],
-            networks: ['default']
+        networks: ['default']
+    }
+}
+
+if (JST.getConfiguration('project.adguard.enabled') === 'true') {
+    jstResult.services[`adguard-node-exporter-main`] = {
+        image: 'ebrianne/adguard-exporter',
+        environment: {
+            adguard_protocol: 'https',
+            adguard_hostname: 'adguard.darkanakin41.local.darkanakin41.com',
+            adguard_username: 'darkanakin41',
+            adguard_password: '#+Repie1991!+#',
+            adguard_port: '443',
+            interval: '10s',
+            log_limit: '10000',
+            server_port: '9617',
+        },
+        networks: ['default']
+    }
+    jstResult.services[`adguard-node-exporter-rivendell`] = {
+        image: 'ebrianne/adguard-exporter',
+        environment: {
+            adguard_protocol: 'http',
+            adguard_hostname: '10.0.0.200',
+            adguard_username: 'darkanakin41',
+            adguard_password: '#+Repie1991!+#',
+            adguard_port: '3000',
+            interval: '10s',
+            log_limit: '10000',
+            server_port: '9617',
+        },
+        networks: ['default']
     }
 }
 

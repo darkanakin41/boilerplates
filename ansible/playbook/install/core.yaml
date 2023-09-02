@@ -1,0 +1,51 @@
+- name: install core packages
+  hosts: "all"
+  become: yes
+  tasks:
+    - name: install core packages
+      apt:
+        name:
+          - prometheus-node-exporter
+          - nfs-common
+          - htop
+          - iftop
+        update_cache: yes
+
+- name: install zsh
+  hosts: "all"
+  become: yes
+  tasks:
+    - name: install zsh
+      apt:
+        name: zsh
+        state: present
+        update_cache: true
+      become: true
+
+- name: max size lvm
+  hosts: "all"
+  become: yes
+  tasks:
+    - name: Extend the logical volume to take all remaining space of the PVs and resize the underlying filesystem
+      community.general.lvol:
+        vg: ubuntu-vg
+        lv: ubuntu-lv
+        size: +100%FREE
+        resizefs: true
+
+- name: Set timezone and configure timesyncd
+  hosts: "all"
+  become: yes
+  tasks:
+    - name: set timezone
+      shell: timedatectl set-timezone Europe/Paris
+
+    - name: Make sure timesyncd is stopped
+      systemd:
+        name: systemd-timesyncd.service
+        state: stopped
+
+    - name: Make sure timesyncd is started
+      systemd:
+        name: systemd-timesyncd.service
+        state: started
