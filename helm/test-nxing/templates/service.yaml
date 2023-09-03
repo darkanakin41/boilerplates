@@ -5,7 +5,8 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - port: {{ .Values.image.defaultPort }}
+    - name: http
+      port: {{ .Values.image.defaultPort }}
       targetPort: {{ .Values.service.port }}
   selector:
     app: {{ .Chart.Name }}

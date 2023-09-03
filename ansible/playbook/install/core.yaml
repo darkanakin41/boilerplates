@@ -5,10 +5,10 @@
     - name: install core packages
       apt:
         name:
-          - prometheus-node-exporter
           - nfs-common
           - htop
           - iftop
+          - apache2-utils
         update_cache: yes
 
 - name: install zsh

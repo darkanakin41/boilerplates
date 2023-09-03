@@ -1,0 +1,25 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ .Chart.Name }}
+  annotations:
+    kubernetes.io/ingress.class: traefik-external
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: "Host(`www.{{ .Chart.Name }}.k8s.local.darkanakin41.com`)"
+      kind: Rule
+      services:
+        - name: nginx
+          port: 80
+    - match: "Host(`{{ .Chart.Name }}.k8s.local.darkanakin41.com`)"
+      kind: Rule
+      services:
+        - name: {{ .Chart.Name }}
+          port: 80
+      middlewares:
+        - name: default-headers
+  tls:
+    secretName: local-example-com-tls
