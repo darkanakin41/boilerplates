@@ -82,6 +82,7 @@ then
 fi
 echo "[$APP] helm configuration loaded "
 
+echo "$(installHelmRepository)"
 COMMAND="helm show values $CHART_REPO_NAME/$CHART_NAME > $APP/values.dist.yaml"
 
 eval "${COMMAND}"
